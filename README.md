@@ -33,14 +33,14 @@ runtime dependency when the application is started. This separation achieves fol
 * :electric_plug: allows to easily swap in/out different implementation (e.g. replace embedded implementation with a call to http service)
 
 ## :computer: REST API
-Although it may be feasible to divide each module into three distinct components, namely API, implementation,
-and protocol, instead of the [recommended](#tv-module-api) two components, this approach may result in an unnecessary
-burden for small  to medium-sized projects. Some cross-cutting concerns, such as security, tracing, and monitoring,
-benefit from looking  at the REST API as a whole. Moreover, from an API client perspective, it's desirable to interact
-with an API that is consistent in terms of naming conventions, versioning and error handling rather than be surprised
-that separate parts of the API behave differently. Furthermore, by running tests of multiple modules in parallel, it
-is possible to encounter issues with starting servers on the same port, sharing or excessively utilizing system
-resources.
+Although it may be feasible to divide each module into three distinct components, namely JVM API, implementation,
+and protocol (e.g. REST), instead of just API and implementation, this approach may result in an unnecessary burden for
+small to medium-sized projects.
+Cross-cutting concerns, such as security, tracing, and monitoring, benefit from looking  at the REST API as a whole.
+Moreover, from an API client perspective, it's desirable to interact with an API that is consistent in terms of naming
+conventions, versioning and error handling rather than be surprised that separate parts of the API behave differently.
+Furthermore, by running tests of multiple modules in parallel, it is possible to encounter issues with starting servers
+on the same port, sharing or excessively utilizing system resources.
 
 ## :floppy_disk: Infrastructure
 There are multiple ways of achieving the separation of database access in the context of multiple modules. On one end of
@@ -138,6 +138,7 @@ Put an upper bound on how many days ahead (or behind) need to be stored.
 - rest api versioning
 - database indexes to ensure reads are fast
 - database migrations using flyway
+- database uses identifiers that are more efficient to index and search through than UUID
 - cache using in memory data structure for artist of the day
 - static code analysis
 - code formatting
