@@ -1,0 +1,174 @@
+openapi: "3.0.3"
+info:
+  title: "music_metadata_service API"
+  description: "music_metadata_service API"
+  version: "1.0.0"
+servers:
+  - url: "https://music_metadata_service"
+paths:
+  /public/api/v1/artists:
+    post:
+      summary: "POST public/api/v1/artists"
+      operationId: "create"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateArtistRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ArtistResource"
+  /public/api/v1/artists/{id}:
+    get:
+      summary: "GET public/api/v1/artists/{id}"
+      operationId: "get"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ArtistResource"
+  /public/api/v1/artists/{id}:rename:
+    post:
+      summary: "POST public/api/v1/artists/{id}:rename"
+      operationId: "rename"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RenameArtistRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Object"
+  /public/api/v1/tracks:
+    post:
+      summary: "POST public/api/v1/tracks"
+      operationId: "create"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/TrackResource"
+    get:
+      summary: "GET public/api/v1/tracks"
+      operationId: "list"
+      parameters:
+        - name: "artistId"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "lastTrackId"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/TrackPage"
+  /public/api/v1/recommendations/artist-of-the-day:
+    get:
+      summary: "GET public/api/v1/recommendations/artist-of-the-day"
+      operationId: "get"
+      parameters:
+        - name: "date"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+            format: "date"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ArtistOfTheDay"
+components:
+  schemas:
+    CreateArtistRequest:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+        aliases:
+          type: "array"
+          items:
+            type: "string"
+    ArtistResource:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+        name:
+          type: "string"
+        aliases:
+          type: "array"
+          items:
+            type: "string"
+    RenameArtistRequest:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+    Object:
+      type: "object"
+      properties: { }
+    TrackResource:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+        title:
+          type: "string"
+        lengthInSeconds:
+          type: "integer"
+          format: "int64"
+        artistId:
+          type: "string"
+        genre:
+          type: "string"
+          enum:
+            - "POP"
+            - "ROCK"
+    TrackPage:
+      type: "object"
+      properties:
+        tracks:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/TrackResource"
+    ArtistOfTheDay:
+      type: "object"
+      properties:
+        id:
+          type: "string"
